@@ -1,10 +1,10 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, AutoToolsBuildEnvironment, tools
 
 
 class Secp256k1Conan(ConanFile):
     name = "secp256k1"
     version = "1.0"
-    license = "BSD"
+    license = "MIT"
     channel = "stable"
     author = "Erik Aronesty <erik@getvida.io>"
     url = "https://github.com/earonesty/conan-secp256k1.git"
@@ -13,27 +13,21 @@ class Secp256k1Conan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = {"shared": False}
-    generators = "cmake_paths", "cmake"
     build_policy = "missing"
-    requires = ( )
 
     def source(self):
-        self.run("git clone git@github.com:vidaid/conan-secp256k1.git")
-
-    def test(self):
-        cmake = CMake(self)
-        cmake.test()
+        self.run("git clone https://github.com/bitcoin-core/secp256k1.git")
 
     def build(self):
-        cmake = CMake(self)
-        cmake.configure(source_folder="secp256k1")
-        cmake.build()
-        cmake.test()
+        autotools = AutoToolsBuildEnvironment(self)
 
-        # Explicit way:
-        # self.run('cmake %s/src %s'
-        #          % (self.source_folder, cmake.command_line))
-        # self.run("cmake --build . %s" % cmake.build_config)
+        with tools.chdir("secp256k1"):
+            with tools.environment_append(autotools.vars):
+                self.run("./autogen.sh")
+
+            autotools.configure()
+            autotools.make()
+            autotools.install()
 
     def package(self):
         self.copy("*.h", dst="include", src="secp256k1")

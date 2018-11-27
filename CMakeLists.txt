@@ -7,7 +7,7 @@ ExternalProject_Add(
         PREFIX ${CMAKE_CURRENT_BINARY_DIR}
         GIT_REPOSITORY "https://github.com/bitcoin-core/secp256k1.git"
         GIT_SHALLOW TRUE
-        CONFIGURE_COMMAND ./autogen.sh COMMAND ./configure --enable-module-ecdh --prefix=${CMAKE_CURRENT_BINARY_DIR}
+        CONFIGURE_COMMAND ./autogen.sh COMMAND ./configure --enable-module-ecdh --enable-experimental --prefix=${CMAKE_CURRENT_BINARY_DIR}
         BUILD_IN_SOURCE 1
         BUILD_COMMAND make
         INSTALL_COMMAND make install
