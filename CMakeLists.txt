@@ -24,3 +24,5 @@ file(MAKE_DIRECTORY ${install_dir}/include)
 set_target_properties(secp256k1 PROPERTIES IMPORTED_LOCATION ${install_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}secp256k1${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 set_target_properties(secp256k1 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${install_dir}/include)
+
+export(PACKAGE secp256k1)
